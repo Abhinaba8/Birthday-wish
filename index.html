@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Wish 🎉</title>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(135deg, #f8cdda, #1d2b64);
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        text-align: center;
+        overflow: hidden;
+    }
+    #wishBox {
+        background: rgba(0,0,0,0.5);
+        padding: 30px;
+        border-radius: 20px;
+        max-width: 600px;
+        display: none;
+        box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    }
+    .typing {
+        border-right: .1em solid #fff;
+        white-space: pre-wrap;
+        overflow: hidden;
+    }
+    button {
+        padding: 15px 30px;
+        font-size: 1.2em;
+        border: none;
+        border-radius: 10px;
+        background: #ff4081;
+        color: #fff;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 20px;
+    }
+    button:hover {
+        background: #e73370;
+    }
+    canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 9999;
+    }
+</style>
+</head>
+<body>
+
+<canvas id="confetti"></canvas>
+
+<div id="wishBox">
+    <h2 class="typing" id="wishText"></h2>
+</div>
+
+<button onclick="showWish()">Tap to see your surprise 🎁</button>
+
+<audio id="bgMusic" src="https://www.bensound.com/bensound-music/bensound-sunny.mp3" loop></audio>
+
+<script>
+// Typing Animation
+const wishMessage = `Hey Debdutta / Debu / Cutie! 🎉🎂
+Happy Birthday to the most incredible, inspiring, and radiant person I know! 🫂💖
+Even from afar, I celebrate you today, remembering all the laughs 😂, talks 🌌, and memories we've shared 💞.
+You are unforgettable, irreplaceable, and deeply cherished 💓.
+With all my love and thoughts today,
+Abhi 😄`;
+
+function showWish() {
+    document.getElementById('wishBox').style.display = 'block';
+    document.querySelector('button').style.display = 'none';
+    document.getElementById('bgMusic').play();
+    let i = 0;
+    const txt = wishMessage;
+    const speed = 30;
+    const wishText = document.getElementById('wishText');
+    wishText.textContent = '';
+    function typeWriter() {
+        if (i < txt.length) {
+            wishText.textContent += txt.charAt(i);
+            i++;
+            setTimeout(typeWriter, speed);
+        }
+    }
+    typeWriter();
+    startConfetti();
+}
+
+// Confetti Animation
+const canvas = document.getElementById('confetti');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let confettiParticles = [];
+
+function ConfettiParticle() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height - canvas.height;
+    this.size = Math.random() * 8 + 4;
+    this.speedY = Math.random() * 3 + 2;
+    this.speedX = Math.random() * 2 - 1;
+    this.color = hsl(${Math.random() * 360}, 70%, 60%);
+}
+
+function createConfetti() {
+    for (let i = 0; i < 150; i++) {
+        confettiParticles.push(new ConfettiParticle());
+    }
+}
+
+function drawConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    confettiParticles.forEach(p => {
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        p.y += p.speedY;
+        p.x += p.speedX;
+        if (p.y > canvas.height) p.y = -10;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.x < 0) p.x = canvas.width;
+    });
+    requestAnimationFrame(drawConfetti);
+}
+
+function startConfetti() {
+    createConfetti();
+    drawConfetti();
+}
+
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+</script>
+
+</body>
+</html>
